@@ -18,6 +18,7 @@ class URL extends Model
 
     public function save_short($long_url)
     {
+        //TODO generate algorithm for shorter hash
          $this->long_url = $long_url;
          $this->short_url = hash('md5', $long_url);
          $this->save();

@@ -20,3 +20,4 @@ use App\Http\Controllers\URLController;
 Route::get('/', '\App\Http\Controllers\URLController@index')->name('url.list');
 
 Route::post('/generate', '\App\Http\Controllers\URLController@generate_short')->name('url.short');
+Route::post('/redirect_to_original', '\App\Http\Controllers\URLController@redirect_to_original')->name('url.redirect');

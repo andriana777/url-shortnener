@@ -27,6 +27,20 @@ body {
                 <input type="text" class="h-8 round text-lg" name="long_url" placeholder="Please enter the url">
             <button type="submit">Generate short url</button>
             </form>
+
+            <div class="d-flex flex-row">
+                <form class="d-flex flex-row" action="{{route('url.redirect')}}" method="POST">
+                    @csrf
+                    <input type="text" class="h-8 round text-lg" name="short_url"
+                           placeholder="Please enter hash and you will be redirected to the original url">
+                    <button type="submit">Redirect to the original url</button>
+                </form>
+{{--                @foreach ($url_list as $url_item)--}}
+{{--                    <p>--}}
+{{--                   <a href="{{$url_item->long_url}}">{{$url_item->short_url}}</a>--}}
+{{--                    </p>--}}
+{{--                @endforeach--}}
+            </div>
         </div>
 </body>
 </html>
