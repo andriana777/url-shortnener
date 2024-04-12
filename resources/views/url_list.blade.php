@@ -21,26 +21,21 @@ body {
         </style>
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            <form class="d-flex flex-row" action="{{route('url.short')}}" method="POST">
+        <div class="relative mr-8 items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+            <form action="{{route('url.short')}}" method="POST">
                 @csrf
                 <input type="text" class="h-8 round text-lg" name="long_url" placeholder="Please enter the url">
-            <button type="submit">Generate short url</button>
+            <button class="text-lg" type="submit">Generate short url</button>
             </form>
 
-            <div class="d-flex flex-row">
-                <form class="d-flex flex-row" action="{{route('url.redirect')}}" method="POST">
+            <p class="m-10">
+                <form action="{{route('url.redirect')}}" method="POST">
                     @csrf
                     <input type="text" class="h-8 round text-lg" name="short_url"
-                           placeholder="Please enter hash and you will be redirected to the original url">
-                    <button type="submit">Redirect to the original url</button>
+                           placeholder="Enter hash for redirect to url">
+                    <button class="text-lg" type="submit">Redirect to the original url</button>
                 </form>
-{{--                @foreach ($url_list as $url_item)--}}
-{{--                    <p>--}}
-{{--                   <a href="{{$url_item->long_url}}">{{$url_item->short_url}}</a>--}}
-{{--                    </p>--}}
-{{--                @endforeach--}}
-            </div>
+            </p>
         </div>
 </body>
 </html>

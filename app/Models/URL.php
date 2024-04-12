@@ -16,17 +16,23 @@ class URL extends Model
         'times',
     ];
 
-    public function save_short($long_url)
+    public function save_short($long_url) : void
     {
-        //TODO generate algorithm for shorter hash
-         $this->long_url = $long_url;
-         $this->short_url = hash('md5', $long_url);
-         $this->save();
+        $this->long_url = $long_url;
+        $hash = crc32($long_url);
+        $this->short_url = substr(base_convert($hash, 10, 36), 0, 4);
+        $this->save();
     }
 
-    public function url_exists($long_url)
+    public function searchByHash($short_url) : string
     {
-        $url_exists = self::where('long_url', $long_url)->exists();
+        $url =  $this->where('short_url', $short_url)->first();
+        $url->update(['times' => $url->times + 1]);
+        return $url->long_url;
+    }
+    public function url_exists($value, $field = 'long_url') : bool
+    {
+        $url_exists = self::where($field, $value)->exists();
         return $url_exists;
     }
 }

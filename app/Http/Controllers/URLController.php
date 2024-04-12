@@ -3,43 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\URL;
+
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class URLController extends Controller
 {
     public function index()
     {
-        $url_list = URL::all();
-        return view('url_list', compact('url_list'));
+        return view('url_list');
     }
 
-    public function generate_short(Request $request, \App\Models\URL $url)
+    public function generate_short(Request $request, URL $url)
     {
         $original_url = filter_var($request->long_url, FILTER_VALIDATE_URL);
         $url_exist = $url->url_exists($request->long_url);
-        if($url_exist){
-            return response('This URL had already been saved', 409);
+        if($url_exist) {
+            return response("This URL <b>$original_url</b> had already been saved", 409);
         }
-        if($original_url && !$url_exist){
+        if($original_url && !$url_exist) {
             $url->save_short($request->long_url);
             return response('Short url was generated and saved successfully!', 201);
         } else {
-            return response('Invalid URL. Please check it', 400);
-         }
-   }
-
-    public function redirect_to_original(Request $request)
-    {
-        //TODO check if exists and not null url
-        //Replace the function to URL model
-        $short_url = $request->short_url;
-        try{
-            $url = URL::where('short_url', $short_url)->first();
-            $url->update(['times' => $url->times + 1]);
-            return redirect($url->long_url);
-        } catch(\Exception $e) {
-            return response('Invalid hash. Please check it', 400);
+            return response("Invalid URL <b>$request->long_url</b>. Please check it", 400);
         }
+    }
 
-   }
+    public function redirect_to_original(Request $request, URL $url)
+    {
+        $short_url = $request->short_url;
+        $short_exist = $url->url_exists($short_url, 'short_url');
+        if($short_exist) {
+            $redirectUrl = $url->searchByHash($short_url);
+            return redirect($redirectUrl);
+        } else {
+            return response("Invalid hash <b>$short_url</b>. Please check it", 400);
+        }
+    }
+
+    public function getUrls() : JsonResponse
+    {
+        URL::all();
+        return response()->json(URL::all());
+    }
 }

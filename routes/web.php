@@ -13,10 +13,6 @@ use App\Http\Controllers\URLController;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Route::get('/', '\App\Http\Controllers\URLController@index')->name('url.list');
 
 Route::post('/generate', '\App\Http\Controllers\URLController@generate_short')->name('url.short');
